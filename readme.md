@@ -603,9 +603,6 @@ class Model{
   static delData(id, callback) {
     // Kita akan menggunakan kembali method readData yang ada di class Model
     // ini juga untuk digunakan pada delData
-    static delData(id, callback) {
-    // Kita akan menggunakan kembali method readData yang ada di class Model
-    // ini juga untuk digunakan pada delData
     this.readData((err, data) => {
       if(err) {
         callback(err, null);

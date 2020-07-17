@@ -369,6 +369,7 @@ Selanjutnya kita akan menyelesaikan `index.js`
 
 ```javascript
 // File: index.js
+
 const Controller = require('./controllers/controller.js');
 
 const argvInput = process.argv;
@@ -396,7 +397,8 @@ terlebih dahulu
 
 ```javascript
 // File: index.js
-..
+
+...
 else if(perintah === 'add') {
   // node <nama_main_app.js> add <nama_game> <publisher> <platform>
   let name = argvInput[3];
@@ -423,6 +425,7 @@ Setelah itu kita akan melanjutkannya dengan menambahkan sebuah method pada
 
 ```javascript
 // File: models/model.js
+
 class Model {
   ...
 
@@ -567,6 +570,7 @@ untuk `del`, oleh karena itu, sekarang kita akan membuatnya lagi dari
 
 ```javascript
 // File: index.js
+
 ...
 else if(perintah === 'del') {
   //node <nama_main_app.js> del <id>
@@ -592,6 +596,7 @@ Setelah itu kita akan melanjutkannya dengan menambahkan sebuah method pada
 
 ```javascript
 // File: models/model.js
+
 class Model{
   ...
 
@@ -636,7 +641,7 @@ class Model{
       }
     });
   } 
-  
+
   ...
 }
 ```

@@ -83,13 +83,13 @@ class Model {
 
         let instanceGame = GameFactory.createGame(
           idGame, name, publisher, platform
-        );;
+        );
 
-        let idxGames = allGames.findIndex((elem) => {
+        let idxGame = allGames.findIndex((elem) => {
           return elem.name === name;
         });
 
-        if (idxGames === -1) {
+        if (idxGame === -1) {
           allGames.push(instanceGame);
 
           fs.writeFile(
@@ -100,22 +100,56 @@ class Model {
                 callback(err, null);
               }
               else {
-                callback(
-                  null,
-                  instanceGame
-                );
+                callback(null, instanceGame);
               }
             }
           );
         }
         else {
-          callback({
-            errorData: instanceGame
-          }, null);
+          callback({errorData: instanceGame}, null);
         }
       }
     });
   }
+
+  static delData(id, callback) {
+    // Kita akan menggunakan kembali method readData yang ada di class Model
+    // ini juga untuk digunakan pada delData
+    this.readData((err, data) => {
+      if(err) {
+        callback(err, null);
+      }
+      else {
+        let allGames = data;
+
+        let idGame = Number(id);
+
+        let idxGame = allGames.findIndex((elem) => {
+          return elem.id === idGame;
+        });
+
+        if (idxGame === -1) {
+          callback({errorData: id}, null);
+        }
+        else {
+          allGames.splice(idxGame, 1);
+
+          fs.writeFile(
+            './data.json',
+            JSON.stringify(allGames, null, 2),
+            (err) => {
+              if(err) {
+                callback(err, null);
+              }
+              else {
+                callback(null, allGames[idxGame]);
+              }
+            }
+          )
+        }
+      }
+    });
+  } 
 }
 
 module.exports = {

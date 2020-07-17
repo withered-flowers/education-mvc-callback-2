@@ -17,3 +17,9 @@ else if(perintah === 'add') {
 
   Controller.addHandler(name, publisher, platform);
 }
+else if(perintah === 'del') {
+  //node <nama_main_app.js> del <id>
+  let id = argvInput[3];
+
+  Controller.delHandler(id);
+}

@@ -390,8 +390,8 @@ node index.js list
 Perhatikan outputnya, apakah sudah sesuai yang diminta ?
 
 ### Release 3 - Adding Data to File
-Setelah kita membuat `list`, maka selanjutnya kita akan fitur tambahan untuk
-`add`, oleh karena itu, sekarang kita akan membuatnya dari `index.js`
+Setelah kita membuat `list`, maka selanjutnya kita akan membuat fitur tambahan
+untuk `add`, oleh karena itu, sekarang kita akan membuatnya dari `index.js`
 terlebih dahulu
 
 ```javascript
@@ -418,7 +418,7 @@ class `Controller` dengan nama `addHandler`
   }
 ```
 
-Setelah itu kita akan melanjutkannya untuk menambahkan sebuah method pada
+Setelah itu kita akan melanjutkannya dengan menambahkan sebuah method pada
 `Model` dengan nama `addData`
 
 ```javascript
@@ -440,13 +440,13 @@ class Model {
 
         let instanceGame = GameFactory.createGame(
           idGame, name, publisher, platform
-        );;
+        );
 
-        let idxGames = allGames.findIndex((elem) => {
+        let idxGame = allGames.findIndex((elem) => {
           return elem.name === name;
         });
 
-        if (idxGames === -1) {
+        if (idxGame === -1) {
           allGames.push(instanceGame);
 
           fs.writeFile(
@@ -457,20 +457,13 @@ class Model {
                 callback(err, null);
               }
               else {
-                callback(
-                  null,
-                  instanceGame
-                );
+                callback(null, instanceGame);
               }
             }
           );
         }
         else {
-          // console.log(instanceGame);
-
-          callback({
-            errorData: instanceGame
-          }, null);
+          callback({errorData: instanceGame}, null);
         }
       }
     });
@@ -482,7 +475,7 @@ Kemudian, setelah method `addData` ini selesai dibuat, kita akan kembali untuk
 melengkapi `Controller` nya lagi
 
 ```javascript
-// Files: controllers/controller.js
+// File: controllers/controller.js
 
   static addHandler(name, publisher, platform) {
     Model.addData(name, publisher, platform, (err, data) => {
@@ -568,5 +561,171 @@ node index.js add "Shield Art Offline" "Badai Camno" Stim
 Dan melihat, apakah hasilnya ?
 
 ### Release 4 - Remove Data from File
+Setelah kita membuat `add`, maka selanjutnya kita akan membuat fitur tambahan
+untuk `del`, oleh karena itu, sekarang kita akan membuatnya lagi dari
+`index.js` terlebih dahulu
+
+```javascript
+// File: index.js
+...
+else if(perintah === 'del') {
+  //node <nama_main_app.js> del <id>
+  let id = argvInput[3];
+
+  // Berarti sekarang kita harus berpindah ke controller lagi
+}
+```
+
+Setelah itu kita akan melanjutkannya untuk menambahkan sebuah method pada
+class `Controller` dengan nama `delHandler`
+
+```javascript
+// File: controllers/controller.js
+
+  static delHandler(id) {
+    // Berarti sekarang kita harus masuk ke bagian model lagi
+  }
+```
+
+Setelah itu kita akan melanjutkannya dengan menambahkan sebuah method pada
+`Model` dengan nama `delData`
+
+```javascript
+// File: models/model.js
+class Model{
+  ...
+
+  static delData(id, callback) {
+    // Kita akan menggunakan kembali method readData yang ada di class Model
+    // ini juga untuk digunakan pada delData
+    static delData(id, callback) {
+    // Kita akan menggunakan kembali method readData yang ada di class Model
+    // ini juga untuk digunakan pada delData
+    this.readData((err, data) => {
+      if(err) {
+        callback(err, null);
+      }
+      else {
+        let allGames = data;
+
+        let idGame = Number(id);
+
+        let idxGame = allGames.findIndex((elem) => {
+          return elem.id === idGame;
+        });
+
+        if (idxGame === -1) {
+          callback({errorData: id}, null);
+        }
+        else {
+          allGames.splice(idxGame, 1);
+
+          fs.writeFile(
+            './data.json',
+            JSON.stringify(allGames, null, 2),
+            (err) => {
+              if(err) {
+                callback(err, null);
+              }
+              else {
+                callback(null, allGames[idxGame]);
+              }
+            }
+          )
+        }
+      }
+    });
+  } 
+  
+  ...
+}
+```
+
+Kemudian setelah method `delData` ini selesai dibuat, kita akan kembali untuk
+melengkapi `Controller` nya lagi
+
+```javascript
+// File: controllers/controller.js
+
+  static delHandler(id) {
+    Model.delData(id, (err, data) => {
+      if(err && err.errorData === undefined) {
+        View.showError(err);
+      }
+      else if(err && err.errorData) {
+        // Kalau ada custom data Error dari kita
+        // maka kita akan menampilkan error ala kita
+        // Berarti kita akan menggunakan method tambahan pada View
+      }
+      else {
+        // Karena data kembaliannya sekarang akan kita proses lebih
+        // lanjut ala addHandler, maka kita harus menambahkan method
+        // pada View-nya kembali
+      }
+    });
+  }
+```
+
+Selanjutnya, kita akan menambahkan method `showSuccessDel` 
+dan `showErrorDel` pada `View` lagi agar dapat menampilkan output sesuai
+yang diharapkan pada requirement.
+
+```javascript
+// File: views/view.js
+
+  static showErrorDel(errData) {
+    console.log(`Game dengan id ${errData.id} tidak ditemukan`);
+  }
+  
+  static showSuccessDel(instance) {
+    console.log(`Game "${instance.name}" berhasil dihapus`);
+  }
+```
+
+Selanjutnya kita akan melengkapi controller dengan method yang sudah dibuat
+pada view.
+
+```javascript
+// File: controllers/controller.js
+  
+  static delHandler(id) {
+    Model.delData(id, (err, data) => {
+      if(err && err.errorData === undefined) {
+        View.showError(err);
+      }
+      else if(err && err.errorData) {
+        // Kalau ada custom data Error dari kita
+        // maka kita akan menampilkan error ala kita
+        // Berarti kita akan menggunakan method tambahan pada View
+        View.showErrorDel(err.errorData);
+      }
+      else {
+        // Karena data kembaliannya sekarang akan kita proses lebih
+        // lanjut ala addHandler, maka kita harus menambahkan method
+        // pada View-nya kembali
+        View.showSuccessDel(data);
+      }
+    });
+  }
+
+```
+
+Kemudian selanjutnya kita akan melengkapi `index.js`
+
+```javascript
+else if(perintah === 'del') {
+  //node <nama_main_app.js> del <id>
+  let id = argvInput[3];
+
+  Controller.delHandler(id);
+}
+```
+
+Kemudian kita akan coba untuk menjalankan aplikasi dengan perintah
+```
+node index.js del 1
+```
+
+Dan melihat, apakah hasilnya ?
 
 `Keep learning !`

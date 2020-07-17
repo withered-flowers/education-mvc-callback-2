@@ -26,6 +26,20 @@ class Controller {
       }
     });
   }
+
+  static delHandler(id) {
+    Model.delData(id, (err, data) => {
+      if(err && err.errorData === undefined) {
+        View.showError(err);
+      }
+      else if(err && err.errorData) {
+        View.showErrorDel(err.errorData);
+      }
+      else {
+        View.showSuccessDel(data);
+      }
+    });
+  }
 }
 
 module.exports = Controller;

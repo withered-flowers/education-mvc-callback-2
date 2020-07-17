@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Defense of the Spaghetti Code",
+    "publisher": "Valvic",
+    "platform": "Stim"
+  },
+  {
+    "id": 2,
+    "name": "Counter Defend",
+    "publisher": "Valvic",
+    "platform": "Stim"
+  },
+  {
+    "id": 3,
+    "name": "Apek Legends",
+    "publisher": "IE Games",
+    "platform": "Original"
+  },
+  {
+    "id": 4,
+    "name": "The Simoleon",
+    "publisher": "Minims",
+    "platform": "Original"
+  },
+  {
+    "id": 5,
+    "name": "Hyper Scoop",
+    "publisher": "UbiHard",
+    "platform": "WubiPlay"
+  },
+  {
+    "id": 6,
+    "name": "Child of Dark",
+    "publisher": "UbiHard MontUnreal",
+    "platform": "WubiPlay"
+  }
+]
